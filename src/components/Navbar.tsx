@@ -1,4 +1,5 @@
-import { MdWbSunny } from 'react-icons/md';
+import { MdMyLocation, MdOutlineLocationOn, MdWbSunny } from 'react-icons/md';
+import { SearchBox } from './SearchBox';
 
 interface NavbarProps {}
 
@@ -11,6 +12,12 @@ export const Navbar = (props: NavbarProps) => {
                     <h2 className='text-gray-500 text-3xl'>Weather</h2>
                     <MdWbSunny className='text-3xl mt-1 text-yellow-300' />
                 </p>
+                <section className='flex gap-2 items-center'>
+                    <MdMyLocation className='text-2xl text-gray-400 hover:opacity-80 cursor-pointer' />
+                    <MdOutlineLocationOn className='text-3xl' />
+                    <p className='text-slate-900/80 text-sm'>Location</p>
+                    <SearchBox />
+                </section>
             </div>
         </nav>
     );
