@@ -1,3 +1,4 @@
+import { cn } from '@/utils/cn';
 import { IoSearch } from 'react-icons/io5';
 
 interface SearchBoxProps {
@@ -8,12 +9,15 @@ interface SearchBoxProps {
 }
 
 export const SearchBox = (props: SearchBoxProps) => {
-    const { value, onChange, onSubmit } = props;
+    const { value, onChange, onSubmit, className } = props;
 
     return (
         <form
             onSubmit={onSubmit}
-            className='flex relative items-center justify-center h-10'
+            className={cn(
+                'flex relative items-center justify-center h-10',
+                className
+            )}
         >
             <input
                 type='text'
