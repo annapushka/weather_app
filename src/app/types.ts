@@ -1,12 +1,12 @@
-export type WeatherData = {
+export interface WeatherResponse {
     cod: string;
     message: number;
     cnt: number;
-    list: WeatherForecast[];
+    list: WeatherData[];
     city: CityInfo;
-};
+}
 
-type WeatherForecast = {
+interface WeatherData {
     dt: number;
     main: MainWeather;
     weather: WeatherDescription[];
@@ -14,12 +14,11 @@ type WeatherForecast = {
     wind: Wind;
     visibility: number;
     pop: number;
-    rain?: Rain; // Optional, as it may not be present in all forecasts
-    sys: Sys;
+    sys: SysInfo;
     dt_txt: string;
-};
+}
 
-type MainWeather = {
+interface MainWeather {
     temp: number;
     feels_like: number;
     temp_min: number;
@@ -29,34 +28,30 @@ type MainWeather = {
     grnd_level: number;
     humidity: number;
     temp_kf: number;
-};
+}
 
-type WeatherDescription = {
+interface WeatherDescription {
     id: number;
     main: string;
     description: string;
     icon: string;
-};
+}
 
-type Clouds = {
+interface Clouds {
     all: number;
-};
+}
 
-type Wind = {
+interface Wind {
     speed: number;
     deg: number;
     gust: number;
-};
+}
 
-type Rain = {
-    '3h': number; // Rain volume for the last 3 hours
-};
+interface SysInfo {
+    pod: string;
+}
 
-type Sys = {
-    pod: string; // Part of the day (e.g., 'd' for day, 'n' for night)
-};
-
-type CityInfo = {
+interface CityInfo {
     id: number;
     name: string;
     coord: Coordinates;
@@ -65,9 +60,9 @@ type CityInfo = {
     timezone: number;
     sunrise: number;
     sunset: number;
-};
+}
 
-type Coordinates = {
+interface Coordinates {
     lat: number;
     lon: number;
-};
+}
