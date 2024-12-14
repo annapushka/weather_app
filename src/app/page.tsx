@@ -8,6 +8,7 @@ import { WeatherResponse } from './types';
 import { format, parseISO } from 'date-fns';
 import { Container } from '@/components/Container';
 import { convertKelvinToCelsius } from '@/utils/convertKelvinToCelsius';
+import { WeatherIcon } from '@/components/WeatherIcon';
 
 const WEATHER_URL = `https://api.openweathermap.org/data/2.5/forecast?q=pune&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}&cnt=2`;
 
@@ -95,6 +96,9 @@ export default function Home() {
                                                 'h:mm a'
                                             )}
                                         </p>
+                                        <WeatherIcon
+                                            iconName={d.weather[0].icon}
+                                        />
                                         <p>
                                             {convertKelvinToCelsius(
                                                 d?.main?.temp ?? 0
