@@ -9,6 +9,7 @@ import { format, parseISO } from 'date-fns';
 import { Container } from '@/components/Container';
 import { convertKelvinToCelsius } from '@/utils/convertKelvinToCelsius';
 import { WeatherIcon } from '@/components/WeatherIcon';
+import { getDayOrNightIcon } from '@/utils/getDayOrNightIcon';
 
 const WEATHER_URL = `https://api.openweathermap.org/data/2.5/forecast?q=pune&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}&cnt=2`;
 
@@ -97,7 +98,10 @@ export default function Home() {
                                             )}
                                         </p>
                                         <WeatherIcon
-                                            iconName={d.weather[0].icon}
+                                            iconName={getDayOrNightIcon(
+                                                d.weather[0].icon,
+                                                d.dt_txt
+                                            )}
                                         />
                                         <p>
                                             {convertKelvinToCelsius(
