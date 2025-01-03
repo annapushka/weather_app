@@ -1,4 +1,7 @@
-import { LuEye } from 'react-icons/lu';
+import { FiDroplet } from 'react-icons/fi';
+import { ImMeter } from 'react-icons/im';
+import { LuEye, LuSunrise, LuSunset } from 'react-icons/lu';
+import { MdAir } from 'react-icons/md';
 
 export interface SingleWeatherDetailsProps {
     information: string;
@@ -35,23 +38,23 @@ const detailsMap = {
         information: 'Visability',
     },
     humidity: {
-        icon: <LuEye />,
+        icon: <FiDroplet />,
         information: 'Humidity',
     },
     windSpeed: {
-        icon: <LuEye />,
-        information: 'Wind Speed',
+        icon: <MdAir />,
+        information: 'Wind speed',
     },
     airPressure: {
-        icon: <LuEye />,
-        information: 'Air Pressure',
+        icon: <ImMeter />,
+        information: 'Air pressure',
     },
     sunrise: {
-        icon: <LuEye />,
+        icon: <LuSunrise />,
         information: 'Sunrise',
     },
     sunset: {
-        icon: <LuEye />,
+        icon: <LuSunset />,
         information: 'Sunset',
     },
 };

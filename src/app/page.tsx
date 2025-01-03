@@ -11,6 +11,7 @@ import { convertKelvinToCelsius } from '@/utils/convertKelvinToCelsius';
 import { WeatherIcon } from '@/components/WeatherIcon';
 import { getDayOrNightIcon } from '@/utils/getDayOrNightIcon';
 import { WeatherDetails } from '@/components/WeatherDetails';
+import { metersToKilometrs } from '@/utils/metersToKilometrs';
 
 const WEATHER_URL = `https://api.openweathermap.org/data/2.5/forecast?q=pune&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}&cnt=2`;
 
@@ -129,10 +130,14 @@ export default function Home() {
                         </Container>
                         <Container className='bg-yellow-300/80 px-6 gap-4 justify-between overflow-x-auto'>
                             <WeatherDetails
-                                visability={'12'}
+                                visability={metersToKilometrs(
+                                    firstData?.visibility
+                                )}
                                 humidity={'12'}
                                 windSpeed={'12'}
-                                airPressure={'12'}
+                                airPressure={`${
+                                    firstData?.main?.pressure ?? '-'
+                                } hPa`}
                                 sunrise={'12'}
                                 sunset={'12'}
                             />
