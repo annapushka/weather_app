@@ -56,16 +56,22 @@ const detailsMap = {
     },
 };
 
+type DetailsMapKeys = keyof typeof detailsMap;
+
 export const WeatherDetails = (props: WeatherDetailsProps) => {
     return (
         <>
-            {Object.keys(detailsMap).map((name) => (
-                <SingleWeatherDetails
-                    information={detailsMap.[name].information}
-                    icon={detailsMap.[name].icon}
-                    value={props.[name]}
-                />
-            ))}
+            {Object.keys(detailsMap).map((name) => {
+                const key = name as DetailsMapKeys;
+                return (
+                    <SingleWeatherDetails
+                        information={detailsMap[key].information}
+                        icon={detailsMap[key].icon}
+                        value={props[key]}
+                        key={key}
+                    />
+                );
+            })}
         </>
     );
 };
