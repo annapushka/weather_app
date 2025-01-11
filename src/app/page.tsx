@@ -5,13 +5,14 @@ import { Navbar } from '@/components/Navbar';
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import { WeatherResponse } from './types';
-import { format, parseISO } from 'date-fns';
+import { format, fromUnixTime, parseISO } from 'date-fns';
 import { Container } from '@/components/Container';
 import { convertKelvinToCelsius } from '@/utils/convertKelvinToCelsius';
 import { WeatherIcon } from '@/components/WeatherIcon';
 import { getDayOrNightIcon } from '@/utils/getDayOrNightIcon';
 import { WeatherDetails } from '@/components/WeatherDetails';
 import { metersToKilometrs } from '@/utils/metersToKilometrs';
+import { convertWindSpeed } from '@/utils/convertWindSpeed';
 
 const WEATHER_URL = `https://api.openweathermap.org/data/2.5/forecast?q=pune&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}&cnt=2`;
 
@@ -133,13 +134,31 @@ export default function Home() {
                                 visability={metersToKilometrs(
                                     firstData?.visibility
                                 )}
-                                humidity={'12'}
-                                windSpeed={'12'}
+                                humidity={`${
+                                    firstData?.main?.humidity ?? '-'
+                                }%`}
+                                windSpeed={convertWindSpeed(
+                                    firstData?.wind?.speed
+                                )}
                                 airPressure={`${
                                     firstData?.main?.pressure ?? '-'
                                 } hPa`}
-                                sunrise={'12'}
-                                sunset={'12'}
+                                sunrise={
+                                    data?.city?.sunrise
+                                        ? format(
+                                              fromUnixTime(data.city.sunrise),
+                                              'H:mm'
+                                          )
+                                        : '-'
+                                }
+                                sunset={
+                                    data?.city?.sunset
+                                        ? format(
+                                              fromUnixTime(data.city.sunset),
+                                              'H:mm'
+                                          )
+                                        : '-'
+                                }
                             />
                         </Container>
                     </div>
