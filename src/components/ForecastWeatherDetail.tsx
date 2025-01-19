@@ -1,6 +1,6 @@
 import { convertKelvinToCelsius } from '@/utils/convertKelvinToCelsius';
 import { Container } from './Container';
-import { WeatherDetailsProps } from './WeatherDetails';
+import { WeatherDetails, WeatherDetailsProps } from './WeatherDetails';
 import { WeatherIcon } from './WeatherIcon';
 
 interface ForecastWeatherDetailProps extends WeatherDetailsProps {
@@ -14,16 +14,17 @@ interface ForecastWeatherDetailProps extends WeatherDetailsProps {
     description: string;
 }
 
-export const ForecastWeatherDetail = ({
-    weatherIcon,
-    date,
-    day,
-    temp,
-    feels_like,
-    temp_min,
-    temp_max,
-    description,
-}: ForecastWeatherDetailProps) => {
+export const ForecastWeatherDetail = (props: ForecastWeatherDetailProps) => {
+    const {
+        weatherIcon,
+        date,
+        day,
+        temp,
+        feels_like,
+        temp_min,
+        temp_max,
+        description,
+    } = props;
     return (
         <Container className='gap-4'>
             <section className='flex gap-4 items-center px-4'>
@@ -45,7 +46,9 @@ export const ForecastWeatherDetail = ({
                     <p className='capitalize'>{description}</p>
                 </div>
             </section>
-            <section className='overflow-x-auto flex justify-between gap-4 px-4 w-full pr-10'></section>
+            <section className='overflow-x-auto flex justify-between gap-4 px-4 w-full pr-10'>
+                <WeatherDetails {...props} />
+            </section>
         </Container>
     );
 };
