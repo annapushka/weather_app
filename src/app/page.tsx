@@ -15,13 +15,14 @@ import { metersToKilometrs } from '@/utils/metersToKilometrs';
 import { convertWindSpeed } from '@/utils/convertWindSpeed';
 import { ForecastWeatherDetail } from '@/components/ForecastWeatherDetail';
 
-const WEATHER_URL = `https://api.openweathermap.org/data/2.5/forecast?q=pune&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}&cnt=2`;
+export const WEATHER_URL = (value: string) =>
+    `https://api.openweathermap.org/data/2.5/forecast?q=${value}&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}&cnt=2`;
 
 export default function Home() {
     const { isLoading, data } = useQuery<WeatherResponse>(
         'repoData',
         async () => {
-            const { data } = await axios.get(WEATHER_URL);
+            const { data } = await axios.get(WEATHER_URL('pure'));
             return data;
         }
     );
