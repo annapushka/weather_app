@@ -28,7 +28,7 @@ export const ForecastWeatherDetail = (props: ForecastWeatherDetailProps) => {
     return (
         <Container className='gap-4'>
             <section className='flex gap-4 items-center px-4'>
-                <div>
+                <div className='flex flex-col gap-1 items-center'>
                     <WeatherIcon iconName={weatherIcon} />
                     <p>{date}</p>
                     <p className='text-sm'>{day}</p>
@@ -39,7 +39,7 @@ export const ForecastWeatherDetail = (props: ForecastWeatherDetailProps) => {
                     </span>
                     <p className='text-xs space-x-1 whitespace-nowrap'>
                         <span>Feels like</span>
-                        <span className='text-5xl'>
+                        <span className='text-xs'>
                             {convertKelvinToCelsius(feels_like ?? 0)}°
                         </span>
                     </p>
