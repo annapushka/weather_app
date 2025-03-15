@@ -3,9 +3,12 @@
 
 import { MdMyLocation, MdOutlineLocationOn, MdWbSunny } from 'react-icons/md';
 import { SearchBox } from './SearchBox';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import axios from 'axios';
-import { WEATHER_URL } from '@/app/page';
+import { SuggetionBox } from './SuggetionBox';
+
+export const CITY_URL = (value: string) =>
+    `https://api.openweathermap.org/data/2.5/find?q=${value}&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}`;
 
 interface NavbarProps {}
 
@@ -16,12 +19,11 @@ export const Navbar = (props: NavbarProps) => {
     const [suggestions, setSuggestions] = useState<string[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
 
-    const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
+    const handleSearch = async (value: string) => {
         setSity(value);
         if (value.length > 2) {
             try {
-                const response = await axios.get(WEATHER_URL(value));
+                const response = await axios.get(CITY_URL(value));
                 const suggestions = response.data.list.map(
                     (item: { name: string }) => item.name
                 );
@@ -38,6 +40,21 @@ export const Navbar = (props: NavbarProps) => {
         }
     };
 
+    const handleSuggestionClick = (suggestion: string) => {
+        setSity(suggestion);
+        setShowSuggestions(false);
+    };
+
+    const handleSubmitSearch = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (suggestions.length === 0) {
+            setError('No suggestions found');
+        } else {
+            setError('');
+            setShowSuggestions(false);
+        }
+    };
+
     return (
         <nav className='shadow-sm sticky top-0 left-0 z-50 bg-white'>
             <div className='h-[80px] w-full flex justify-between items-center max-w-7x1 px-3 mx-auto'>
@@ -49,7 +66,21 @@ export const Navbar = (props: NavbarProps) => {
                     <MdMyLocation className='text-2xl text-gray-400 hover:opacity-80 cursor-pointer' />
                     <MdOutlineLocationOn className='text-3xl' />
                     <p className='text-slate-900/80 text-sm'>Location</p>
-                    <SearchBox value={city} onChange={handleSearch} />
+                    <div className='relative'>
+                        <SearchBox
+                            value={city}
+                            onChange={(e) => handleSearch(e.target.value)}
+                            onSubmit={handleSubmitSearch}
+                        />
+                        <SuggetionBox
+                            {...{
+                                showSuggestions,
+                                suggestions,
+                                handleSuggestionClick,
+                                error,
+                            }}
+                        />
+                    </div>
                 </section>
             </div>
         </nav>
