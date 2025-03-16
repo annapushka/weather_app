@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /** @format */
 'use client';
 
@@ -6,18 +7,24 @@ import { SearchBox } from './SearchBox';
 import { FormEvent, useState } from 'react';
 import axios from 'axios';
 import { SuggetionBox } from './SuggetionBox';
+import { loadingCityAtom, placeAtom } from '@/app/atom';
+import { useAtom } from 'jotai';
 
 export const CITY_URL = (value: string) =>
     `https://api.openweathermap.org/data/2.5/find?q=${value}&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}`;
 
-interface NavbarProps {}
+interface NavbarProps {
+    location: string | undefined;
+}
 
 export const Navbar = (props: NavbarProps) => {
-    const {} = props;
+    const { location } = props;
     const [city, setSity] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [suggestions, setSuggestions] = useState<string[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const [_, setPlace] = useAtom(placeAtom);
+    const [__, setLoadingCityAtom] = useAtom(loadingCityAtom);
 
     const handleSearch = async (value: string) => {
         setSity(value);
@@ -46,12 +53,18 @@ export const Navbar = (props: NavbarProps) => {
     };
 
     const handleSubmitSearch = (e: FormEvent<HTMLFormElement>) => {
+        setLoadingCityAtom(true);
         e.preventDefault();
         if (suggestions.length === 0) {
             setError('No suggestions found');
+            setLoadingCityAtom(false);
         } else {
             setError('');
-            setShowSuggestions(false);
+            setTimeout(() => {
+                setLoadingCityAtom(false);
+                setPlace(city);
+                setShowSuggestions(false);
+            }, 1000);
         }
     };
 
@@ -65,7 +78,9 @@ export const Navbar = (props: NavbarProps) => {
                 <section className='flex gap-2 items-center'>
                     <MdMyLocation className='text-2xl text-gray-400 hover:opacity-80 cursor-pointer' />
                     <MdOutlineLocationOn className='text-3xl' />
-                    <p className='text-slate-900/80 text-sm'>Location</p>
+                    <p className='text-slate-900/80 text-sm'>
+                        {location ?? '-'}
+                    </p>
                     <div className='relative'>
                         <SearchBox
                             value={city}

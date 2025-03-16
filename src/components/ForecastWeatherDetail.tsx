@@ -9,22 +9,12 @@ interface ForecastWeatherDetailProps extends WeatherDetailsProps {
     day: string;
     temp: number;
     feels_like: number;
-    temp_min: number;
-    temp_max: number;
     description: string;
 }
 
 export const ForecastWeatherDetail = (props: ForecastWeatherDetailProps) => {
-    const {
-        weatherIcon,
-        date,
-        day,
-        temp,
-        feels_like,
-        temp_min,
-        temp_max,
-        description,
-    } = props;
+    const { weatherIcon, date, day, temp, feels_like, description } = props;
+
     return (
         <Container className='gap-4'>
             <section className='flex gap-4 items-center px-4'>
