@@ -13,6 +13,9 @@ import { useAtom } from 'jotai';
 export const CITY_URL = (value: string) =>
     `https://api.openweathermap.org/data/2.5/find?q=${value}&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}`;
 
+export const COORDS_URL = (lat: number, lon: number) =>
+    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}`;
+
 interface NavbarProps {
     location: string | undefined;
 }
@@ -68,36 +71,84 @@ export const Navbar = (props: NavbarProps) => {
         }
     };
 
+    const handleCurrentLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                const { latitude, longitude } = position.coords;
+                try {
+                    setLoadingCityAtom(true);
+                    const response = await axios.get(
+                        COORDS_URL(latitude, longitude)
+                    );
+
+                    setTimeout(() => {
+                        setLoadingCityAtom(false);
+                        const city = response.data.name;
+                        setPlace(city);
+                    }, 500);
+                } catch (error) {
+                    console.error('Error fetching city:', error);
+                } finally {
+                    setLoadingCityAtom(false);
+                }
+            });
+        }
+    };
+
     return (
-        <nav className='shadow-sm sticky top-0 left-0 z-50 bg-white'>
-            <div className='h-[80px] w-full flex justify-between items-center max-w-7x1 px-3 mx-auto'>
-                <p className='flex items-center justify-center gap-2'>
-                    <h2 className='text-gray-500 text-3xl'>Weather</h2>
-                    <MdWbSunny className='text-3xl mt-1 text-yellow-300' />
-                </p>
-                <section className='flex gap-2 items-center'>
-                    <MdMyLocation className='text-2xl text-gray-400 hover:opacity-80 cursor-pointer' />
-                    <MdOutlineLocationOn className='text-3xl' />
-                    <p className='text-slate-900/80 text-sm'>
-                        {location ?? '-'}
+        <>
+            {' '}
+            <nav className='shadow-sm sticky top-0 left-0 z-50 bg-white'>
+                <div className='h-[80px] w-full flex justify-between items-center max-w-7x1 px-3 mx-auto'>
+                    <p className='flex items-center justify-center gap-2'>
+                        <h2 className='text-gray-500 text-3xl'>Weather</h2>
+                        <MdWbSunny className='text-3xl mt-1 text-yellow-300' />
                     </p>
-                    <div className='relative'>
-                        <SearchBox
-                            value={city}
-                            onChange={(e) => handleSearch(e.target.value)}
-                            onSubmit={handleSubmitSearch}
+                    <section className='flex gap-2 items-center'>
+                        <MdMyLocation
+                            className='text-2xl text-gray-400 hover:opacity-80 cursor-pointer'
+                            onClick={handleCurrentLocation}
+                            title='Your current location'
                         />
-                        <SuggetionBox
-                            {...{
-                                showSuggestions,
-                                suggestions,
-                                handleSuggestionClick,
-                                error,
-                            }}
-                        />
-                    </div>
-                </section>
-            </div>
-        </nav>
+                        <MdOutlineLocationOn className='text-3xl' />
+                        <p className='text-slate-900/80 text-sm'>
+                            {location ?? '-'}
+                        </p>
+                        <div className='relative hidden md:flex'>
+                            <SearchBox
+                                value={city}
+                                onChange={(e) => handleSearch(e.target.value)}
+                                onSubmit={handleSubmitSearch}
+                            />
+                            <SuggetionBox
+                                {...{
+                                    showSuggestions,
+                                    suggestions,
+                                    handleSuggestionClick,
+                                    error,
+                                }}
+                            />
+                        </div>
+                    </section>
+                </div>
+            </nav>
+            <section className='flex max-w-7xl px-3 md:hidden'>
+                <div className='relative'>
+                    <SearchBox
+                        value={city}
+                        onChange={(e) => handleSearch(e.target.value)}
+                        onSubmit={handleSubmitSearch}
+                    />
+                    <SuggetionBox
+                        {...{
+                            showSuggestions,
+                            suggestions,
+                            handleSuggestionClick,
+                            error,
+                        }}
+                    />
+                </div>
+            </section>
+        </>
     );
 };
